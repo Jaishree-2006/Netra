@@ -1,32 +1,70 @@
-# React + TypeScript + Vite
+# Netra AI — State Crime Intelligence Analytics Platform
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+> **Netra** (नेत्र — *"The Eye"*) is a full-scale AI-Driven Crime Analytics & Predictive Policing Command Platform for State Law Enforcement agencies.
 
-Currently, two official plugins are available:
+🔗 **Live Demo**: [https://jaishree-2006.github.io/Netra/](https://jaishree-2006.github.io/Netra/)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+---
 
-## React Compiler
+## 🌐 Platform Architecture
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+| Layer | Technology |
+|-------|-----------|
+| Frontend | React 18 + TypeScript + Vite |
+| Styling | Tailwind CSS v4 |
+| Charts | Recharts |
+| Aurora FX | Canvas API + requestAnimationFrame |
+| Backend | Python FastAPI |
+| AI/ML | XGBoost + scikit-learn + spaCy (design spec) |
+| Graph DB | Neo4j (design spec) |
+| GIS | PostGIS + Mapbox GL (design spec) |
 
-## Expanding the Oxlint configuration
+---
 
-If you are developing a production application, we recommend enabling type-aware lint rules by installing `oxlint-tsgolint` and editing `.oxlintrc.json`:
+## 🎯 Key Features
 
-```json
-{
-  "$schema": "./node_modules/oxlint/configuration_schema.json",
-  "plugins": ["react", "typescript", "oxc"],
-  "options": {
-    "typeAware": true
-  },
-  "rules": {
-    "react/rules-of-hooks": "error",
-    "react/only-export-components": ["warn", { "allowConstantExport": true }]
-  }
-}
+- 🌌 **Aurora Gradient Hero** — 60 FPS canvas WebGL-style interactive gradient with spring cursor glow
+- 🔐 **Multi-role RBAC** — District SP, SHO, Analyst, Auditor, DGP, Public Citizen
+- 🗺️ **Geospatial Hotspot Map** — Time slider, crime type filters, incident inspector
+- 🕸️ **Link & Network Analysis** — Multi-hop entity graph (suspects, FIRs, vehicles, SIMs)
+- 🧠 **Explainable Predictive Risk** — SHAP factor attribution transparency + ethics audit
+- 🎛️ **What-If Resource Simulator** — Patrol allocation sandbox with live risk forecasting
+- 🤖 **AI Co-pilot** — Natural language query engine (RAG + LLM query parsing)
+- 📋 **WORM Audit Trail** — Cryptographic immutable audit log for oversight compliance
+- 👁️ **Public Transparency Portal** — Anonymized 1km² aggregated safety heatmaps
+
+---
+
+## 🚀 Run Locally
+
+### Frontend
+
+```bash
+npm install
+npm run dev
 ```
 
-See the [Oxlint rules documentation](https://oxc.rs/docs/guide/usage/linter/rules) for the full list of rules and categories.
+### Backend (FastAPI)
+
+```bash
+cd backend
+pip install -r requirements.txt
+uvicorn main:app --reload
+```
+
+Backend API docs: `http://localhost:8000/docs`
+
+---
+
+## 🔒 Security & Ethics
+
+This platform is designed with **ethical AI first principles**:
+
+- All AI risk scores include SHAP-based human-readable explanation panels
+- Human-in-the-loop review required before patrol dispatch
+- Independent Oversight Board auditor role with read-only cryptographic log access
+- Disparate Impact (DI) metric fairness auditing built into the model pipeline
+
+---
+
+*© 2026 State Police Cyber Cell & Intelligence Analytics Wing*
