@@ -3,7 +3,7 @@ import { useAuth } from '../../context/AuthContext';
 import { Shield, KeyRound, CheckCircle, Lock } from 'lucide-react';
 import type { UserRole } from '../../types';
 
-export const LoginModal: React.FC<{ isOpen: boolean; onClose: () => void }> = ({ isOpen, onClose }) => {
+export const LoginModal: React.FC<{ isOpen: boolean; onClose: () => void; onSuccess?: () => void }> = ({ isOpen, onClose, onSuccess }) => {
   const { setRole, verifyMFA } = useAuth();
   const [selectedRole, setSelectedRoleState] = useState<UserRole>('district_head');
   const [mfaCode, setMfaCode] = useState('');
@@ -22,6 +22,7 @@ export const LoginModal: React.FC<{ isOpen: boolean; onClose: () => void }> = ({
     if (verifyMFA(mfaCode)) {
       setRole(selectedRole);
       onClose();
+      onSuccess?.();
     } else {
       setError('Invalid 6-digit MFA token. Try 123456');
     }

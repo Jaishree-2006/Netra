@@ -141,7 +141,7 @@ export const PublicLanding: React.FC<{ onOpenDashboard: () => void }> = ({ onOpe
       </footer>
 
       {/* Login Modal */}
-      <LoginModal isOpen={loginModalOpen} onClose={() => setLoginModalOpen(false)} />
+      <LoginModal isOpen={loginModalOpen} onClose={() => setLoginModalOpen(false)} onSuccess={onOpenDashboard} />
 
       {/* Request Access Modal */}
       {requestAccessOpen && (
