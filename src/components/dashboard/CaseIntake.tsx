@@ -59,7 +59,9 @@ export const CaseIntake: React.FC = () => {
   const [submitSuccess, setSubmitSuccess] = useState<string | null>(null);
 
   // Enabled editing for all roles in demo mode so user can edit and test intake freely
+  const canWrite = true;
   const isViewOnly = false;
+  const autoFirId = `FIR-2026-${9105 + cases.length}`;
 
   const handleNewFirSubmit = (isDraft: boolean) => {
     const created = addNewFir(
