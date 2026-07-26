@@ -2,8 +2,6 @@
 
 > **Netra** (नेत्र — *"The Eye"*) is a full-scale AI-Driven Crime Analytics & Predictive Policing Command Platform for State Law Enforcement agencies.
 
-🔗 **Live Demo**: [https://jaishree-2006.github.io/Netra/](https://jaishree-2006.github.io/Netra/)
-
 ---
 
 ## 🌐 Platform Architecture
