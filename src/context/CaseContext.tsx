@@ -173,7 +173,7 @@ export const CaseProvider: React.FC<{ children: React.ReactNode }> = ({ children
     wormLedger.addAuditTransaction({
       timestamp: new Date().toISOString(),
       officerBadge: 'OFFICER-SESSION',
-      action: `CASE_UPDATE_${status.toUpperCase()}`,
+      action: `CASE_UPDATE_${status.toUpperCase()}_NOTE:${note.slice(0, 20)}`,
       targetRef: caseId,
     });
   };

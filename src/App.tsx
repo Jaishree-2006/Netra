@@ -13,7 +13,7 @@ import { AICopilot } from './components/dashboard/AICopilot';
 import { AuditLog } from './components/dashboard/AuditLog';
 import { CaseIntake } from './components/dashboard/CaseIntake';
 import { CaseProvider } from './context/CaseContext';
-import { Bell, ShieldCheck, X, Check, AlertTriangle } from 'lucide-react';
+import { Bell, ShieldCheck, X, AlertTriangle } from 'lucide-react';
 
 const DashboardContent: React.FC<{ onBackToLanding: () => void }> = ({ onBackToLanding }) => {
   const { currentUser } = useAuth();

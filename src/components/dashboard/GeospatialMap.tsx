@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import { MapContainer, TileLayer, CircleMarker, Popup, useMap } from 'react-leaflet';
+import { MapContainer, TileLayer, CircleMarker, Popup } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import {
-  MapPin, Filter, Clock, AlertTriangle, ChevronDown,
+  MapPin, Filter, Clock, ChevronDown,
   Layers, Info, Lock, CheckCircle2, X, Send, FileText
 } from 'lucide-react';
 import { MOCK_INCIDENTS } from '../../data/mockData';
@@ -15,7 +15,7 @@ const NOTIFY_ALLOWED_ROLES = ['super_admin', 'command_level', 'district_head', '
 // These represent KDE-derived hotspot centroids shown as CSS radial-gradient overlays
 // We use a Leaflet custom overlay via a DivOverlay alternative: position as CSS absolute
 // over the map via a fixed coordinate-to-pixel mapping for the demo viewport.
-const HEATMAP_BLOBS = [
+export const HEATMAP_BLOBS = [
   { id: 'h1', label: 'MG Road / Sector 18', intensity: 'critical', opacity: 0.55, size: 160 },
   { id: 'h2', label: 'Tech Park Parking', intensity: 'high', opacity: 0.42, size: 120 },
   { id: 'h3', label: 'Commercial Hub 9', intensity: 'medium', opacity: 0.30, size: 90 },

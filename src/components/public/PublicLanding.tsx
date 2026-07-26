@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { AuroraCanvas } from './AuroraCanvas';
 import {
-  Shield, Sparkles, Lock, Activity, MapPin, Eye, GitFork,
-  ShieldCheck, CheckCircle2, User, BadgeCheck, Building2,
+  Shield, Sparkles, Lock, MapPin, Eye, GitFork,
+  ShieldCheck, CheckCircle2, User, BadgeCheck,
   AlertTriangle, ChevronRight, X, RotateCcw
 } from 'lucide-react';
 import { LoginModal } from '../auth/LoginModal';

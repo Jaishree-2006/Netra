@@ -1,17 +1,12 @@
 import React, { useState } from 'react';
 import {
   FilePlus,
-  ShieldCheck,
   Lock,
   MapPin,
-  Clock,
   User,
   Paperclip,
   CheckCircle2,
-  AlertTriangle,
   FileText,
-  Search,
-  Eye,
   GitCommit,
   UserCheck,
   Send,
@@ -32,7 +27,7 @@ const CRIME_TAXONOMY = [
 
 export const CaseIntake: React.FC = () => {
   const { currentUser } = useAuth();
-  const { cases, myCases, pendingApprovalCases, addNewFir, approveCaseBySho, updateExistingCase } = useCases();
+  const { cases, pendingApprovalCases, addNewFir, approveCaseBySho, updateExistingCase } = useCases();
   const [activeMode, setActiveMode] = useState<'new' | 'update' | 'my_cases'>('new');
 
   // File upload state & ref
@@ -603,8 +598,8 @@ export const CaseIntake: React.FC = () => {
                 onChange={(e) => setSelectedCaseId(e.target.value)}
                 className="w-full p-2.5 text-xs bg-slate-950 border border-slate-800 rounded-xl text-slate-100 font-mono font-bold focus:outline-none focus:border-cyan-500"
               >
-                {ASSIGNED_CASES.map((c) => (
-                  <option key={c.id} value={c.id}>{c.id} — {c.crime} ({c.station})</option>
+                {cases.map((c: any) => (
+                  <option key={c.id} value={c.id}>{c.id} — {c.crime || c.crimeType} ({c.station || c.policeStation})</option>
                 ))}
               </select>
             </div>
@@ -617,7 +612,7 @@ export const CaseIntake: React.FC = () => {
               <select
                 value={caseStatus}
                 disabled={isViewOnly}
-                onChange={(e) => setCaseStatus(e.target.value)}
+                onChange={(e) => setCaseStatus(e.target.value as any)}
                 className="w-full p-2.5 text-xs bg-slate-950 border border-slate-800 rounded-xl text-cyan-300 font-bold focus:outline-none focus:border-cyan-500"
               >
                 <option value="Open">Open</option>

@@ -1,20 +1,22 @@
 import React, { useState } from 'react';
-import { Sparkles, Send, Bot, Filter, ShieldCheck, Lock, CheckCircle2, AlertTriangle, FileText, Database } from 'lucide-react';
+import { Sparkles, Send, Bot, Filter, ShieldCheck, Lock, CheckCircle2 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
+
+interface ChatMessage {
+  role: 'user' | 'assistant';
+  text: string;
+  filters?: any;
+  firewallStatus?: {
+    roleCheck: string;
+    biasCheck: string;
+    fieldCheck: string;
+  };
+}
 
 export const AICopilot: React.FC = () => {
   const { currentUser } = useAuth();
   const [query, setQuery] = useState('');
-  const [chatHistory, setChatHistory] = useState<{
-    role: 'user' | 'assistant';
-    text: string;
-    filters?: any;
-    firewallStatus?: {
-      roleCheck: string;
-      biasCheck: string;
-      fieldCheck: string;
-    };
-  }>([
+  const [chatHistory, setChatHistory] = useState<ChatMessage[]>([
     {
       role: 'assistant',
       text: 'Greetings Officer. I am Netra Co-pilot. Ask me any query in natural language (e.g. "Show repeat offenders in Sector 18", "What is the nocturnal risk forecast for Tech Park?").',

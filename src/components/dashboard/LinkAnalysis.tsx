@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
-import { GitFork, Search, ChevronDown, Info, ShieldAlert, FileText, Download, CheckCircle2, Lock } from 'lucide-react';
+import { GitFork, Search, ChevronDown, Info, ShieldAlert, FileText, CheckCircle2 } from 'lucide-react';
 import { MOCK_NETWORK_DATA } from '../../data/mockData';
 import type { NetworkNode } from '../../types';
-import { useAuth } from '../../context/AuthContext';
 
 // Helper to format confidence levels without false precision
 function formatConfidence(confidence: number) {
@@ -28,7 +27,6 @@ function formatConfidence(confidence: number) {
 }
 
 export const LinkAnalysis: React.FC = () => {
-  const { currentUser } = useAuth();
   const [selectedNode, setSelectedNode] = useState<NetworkNode | null>(MOCK_NETWORK_DATA.nodes[0]);
   const [isExpanded, setIsExpanded] = useState(true);
   const [reportExported, setReportExported] = useState(false);

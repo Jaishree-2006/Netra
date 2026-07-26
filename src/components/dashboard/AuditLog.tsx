@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { FileCheck, Download, ChevronDown, Search, Filter, AlertTriangle, ShieldAlert, Flag, CheckCircle2, X } from 'lucide-react';
-import { useAuth } from '../../context/AuthContext';
 
 interface AuditLogEntry {
   id: string;
@@ -70,7 +69,6 @@ const mockAuditLogs: AuditLogEntry[] = [
 ];
 
 export const AuditLog: React.FC = () => {
-  const { currentUser } = useAuth();
   const [isExpanded, setIsExpanded] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [filterAction, setFilterAction] = useState('All');

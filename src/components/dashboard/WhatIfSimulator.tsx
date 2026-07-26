@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Sliders, TrendingDown, ArrowRight, RotateCcw, ChevronDown, Send, FileText, CheckCircle2, ShieldAlert, X } from 'lucide-react';
+import { Sliders, TrendingDown, RotateCcw, ChevronDown, Send, FileText, CheckCircle2, ShieldAlert, X } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 
 export const WhatIfSimulator: React.FC = () => {

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { MOCK_INCIDENTS } from '../../data/mockData';
 import {
   ShieldAlert, AlertTriangle, TrendingUp, Users, CheckCircle2, MapPin,
-  Activity, ArrowUpRight, ArrowDownRight, RotateCcw, Info, Lock, Eye, EyeOff
+  Activity, ArrowUpRight, ArrowDownRight, Info, Lock
 } from 'lucide-react';
 import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
 import { useAuth } from '../../context/AuthContext';
@@ -29,7 +29,7 @@ const zoneAggregates = [
 ];
 
 // Roles that may see individual case rows in the FIR table
-const CASE_DETAIL_ROLES = ['super_admin', 'sho', 'analyst', 'auditor'];
+export const CASE_DETAIL_ROLES = ['super_admin', 'sho', 'analyst', 'auditor'];
 // Roles that may see Assigned Officer name
 const OFFICER_VISIBLE_ROLES = ['super_admin', 'sho', 'district_head'];
 
@@ -38,7 +38,6 @@ export const MainOverview: React.FC<{ onNavigate: (tab: string) => void }> = ({ 
   const { pendingApprovalCases, approveCaseBySho, verifiedCases } = useCases();
   const [closureInfoOpen, setClosureInfoOpen] = useState(false);
 
-  const canSeeCaseDetail = CASE_DETAIL_ROLES.includes(currentUser.role);
   const canSeeOfficerName = OFFICER_VISIBLE_ROLES.includes(currentUser.role);
   const isCommandView = currentUser.role === 'command_level' || currentUser.role === 'district_head';
 
