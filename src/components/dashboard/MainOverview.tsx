@@ -150,8 +150,8 @@ export const MainOverview: React.FC<{ onNavigate: (tab: string) => void }> = ({ 
         </div>
       </div>
 
-      {/* ── Chart + AI Anomaly Feed (50/50 Balanced Prominent Grid) ───── */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      {/* ── Chart + AI Anomaly Feed (Full-width stacked layout) ───── */}
+      <div className="flex flex-col gap-6">
 
         {/* 24-Hour Temporal Forecast Graph (Clean Tight Layout, No Dead Space) */}
         <div className="p-5 dashboard-card rounded-2xl flex flex-col justify-between space-y-3">
@@ -168,7 +168,7 @@ export const MainOverview: React.FC<{ onNavigate: (tab: string) => void }> = ({ 
             </span>
           </div>
 
-          <div className="h-56 w-full">
+          <div className="h-96 w-full">
             <ResponsiveContainer width="100%" height="100%">
               <AreaChart data={trendData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
                 <defs>
@@ -191,8 +191,8 @@ export const MainOverview: React.FC<{ onNavigate: (tab: string) => void }> = ({ 
           </div>
         </div>
 
-        {/* AI Anomaly Feed (Expanded Prominent 50% Column) */}
-        <div className="p-5 dashboard-card rounded-2xl space-y-3.5 flex flex-col justify-between border-purple-500/30">
+        {/* AI Anomaly Feed (Full-width 3-column grid) */}
+        <div className="p-5 dashboard-card rounded-2xl space-y-3.5 border-purple-500/30">
           <div>
             <div className="flex items-center justify-between mb-1">
               <h3 className="display-heading text-sm md:text-base font-extrabold text-slate-100 flex items-center gap-2">
@@ -205,7 +205,7 @@ export const MainOverview: React.FC<{ onNavigate: (tab: string) => void }> = ({ 
             </div>
             <p className="text-[11px] text-slate-400 mb-3">Transformer NLP &amp; Clustering detections · Automated threat pattern monitor</p>
 
-            <div className="space-y-3">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
 
               {/* Anomaly Item 1 */}
               <div className="p-3 bg-slate-950 border border-purple-500/40 rounded-xl text-xs space-y-1.5 hover:border-purple-400 transition shadow-sm">
