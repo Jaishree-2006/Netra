@@ -6,6 +6,11 @@ export default {
   ],
   theme: {
     extend: {
+      fontFamily: {
+        // Google Sans Display / Product Sans closest open-source equivalent
+        sans: ['DM Sans', 'Space Grotesk', 'Outfit', 'Inter', '-apple-system', 'sans-serif'],
+        display: ['DM Sans', 'Space Grotesk', 'Outfit', 'sans-serif'],
+      },
       colors: {
         brand: {
           dark: '#0F172A',

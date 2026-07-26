@@ -43,11 +43,12 @@ export interface OffenderProfile {
   name: string;
   alias: string;
   age: number;
-  riskCategory: 'High Recidivism' | 'Moderate' | 'Low';
+  riskCategory: string;
   lastKnownLocation: string;
   associatedGang: string;
   totalPriorCases: number;
   activeBailStatus: boolean;
+  linkedFirs?: string[];
   photoUrl: string;
   recentActivity: { date: string; event: string }[];
 }
