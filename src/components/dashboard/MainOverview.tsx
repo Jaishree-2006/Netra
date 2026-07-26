@@ -240,6 +240,7 @@ export const MainOverview: React.FC<{ onNavigate: (tab: string) => void }> = ({ 
                   <span className="font-mono bg-slate-800 px-1.5 py-0.5 rounded text-cyan-300 font-bold">SUSPECT-REF-2231</span> cell-tower
                   triangulation ping detected in Sector 18 during robbery window.
                 </p>
+                <div className="flex items-center justify-between pt-1.5 border-t border-slate-800">
                   <div className="flex items-center gap-1 text-[11px] text-amber-300 font-mono font-bold">
                     <Lock className="w-3 h-3" />
                     Bail Warrant #WR-2026-448
