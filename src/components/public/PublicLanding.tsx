@@ -120,22 +120,22 @@ const RequestAccessModal: React.FC<{ onClose: () => void }> = ({ onClose }) => {
   const labelCls = 'block text-xs font-semibold text-slate-300 mb-1.5 tracking-wide';
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/90 backdrop-blur-md p-4 overflow-y-auto">
-      <div className="w-full max-w-2xl bg-slate-900 border border-slate-700/40 rounded-3xl shadow-2xl my-8 overflow-hidden">
-        {/* Gradient Header Banner */}
-        <div className="relative p-8 bg-gradient-to-br from-cyan-950 via-slate-900 to-purple-950 border-b border-slate-700/50">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/90 backdrop-blur-md p-4 sm:p-6">
+      <div className="w-full max-w-2xl max-h-[92vh] flex flex-col bg-slate-900 border border-slate-700/40 rounded-3xl shadow-2xl overflow-hidden my-auto">
+        {/* Gradient Header Banner - Always Visible at Top */}
+        <div className="relative p-6 sm:p-7 bg-gradient-to-br from-cyan-950 via-slate-900 to-purple-950 border-b border-slate-700/50 shrink-0">
           <div className="absolute inset-0 opacity-20" style={{ backgroundImage: 'radial-gradient(#06b6d4 1px, transparent 1px)', backgroundSize: '24px 24px' }} />
-          <button onClick={onClose} className="absolute top-4 right-4 p-2 text-slate-400 hover:text-white hover:bg-white/10 rounded-xl transition">
-            <X className="w-4 h-4" />
+          <button onClick={onClose} className="absolute top-4 right-4 p-2 text-slate-400 hover:text-white hover:bg-white/10 rounded-xl transition z-10">
+            <X className="w-5 h-5" />
           </button>
-          <div className="relative flex items-start gap-5">
-            <div className="p-4 bg-cyan-500/15 border border-cyan-500/40 rounded-2xl shrink-0">
-              <BadgeCheck className="w-8 h-8 text-cyan-400" />
+          <div className="relative flex items-start gap-4">
+            <div className="p-3 bg-cyan-500/15 border border-cyan-500/40 rounded-2xl shrink-0">
+              <BadgeCheck className="w-7 h-7 text-cyan-400" />
             </div>
-            <div className="space-y-1.5">
+            <div className="space-y-1">
               <span className="text-[10px] font-mono font-extrabold tracking-widest text-cyan-400 uppercase">NETRA AI — Secure Access</span>
-              <h3 className="text-2xl font-extrabold text-slate-100 tracking-tight">Request Platform Access</h3>
-              <p className="text-sm text-slate-400 leading-relaxed max-w-md">
+              <h3 className="text-xl sm:text-2xl font-extrabold text-slate-100 tracking-tight">Request Platform Access</h3>
+              <p className="text-xs sm:text-sm text-slate-400 leading-relaxed max-w-md">
                 Account provisioning is admin-controlled and requires your supervisor to verify your identity. No account is created automatically.
               </p>
               <div className="flex flex-wrap gap-2 pt-1">
@@ -148,7 +148,7 @@ const RequestAccessModal: React.FC<{ onClose: () => void }> = ({ onClose }) => {
         </div>
 
         {submitted ? (
-          <div className="p-8 text-center space-y-4">
+          <div className="p-8 text-center space-y-4 overflow-y-auto">
             <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-emerald-500/10 border border-emerald-500/30">
               <CheckCircle2 className="w-8 h-8 text-emerald-400" />
             </div>
@@ -167,7 +167,7 @@ const RequestAccessModal: React.FC<{ onClose: () => void }> = ({ onClose }) => {
             </button>
           </div>
         ) : (
-          <form onSubmit={handleSubmit} className="p-6 space-y-5">
+          <form onSubmit={handleSubmit} className="p-6 space-y-5 overflow-y-auto flex-1">
             {/* Warning banner */}
             <div className="flex items-start gap-3 p-3.5 bg-amber-500/10 border border-amber-500/30 rounded-xl text-xs text-amber-300">
               <AlertTriangle className="w-4 h-4 shrink-0 mt-0.5" />
