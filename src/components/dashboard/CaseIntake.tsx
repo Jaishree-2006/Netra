@@ -35,6 +35,9 @@ export const CaseIntake: React.FC = () => {
   const { cases, myCases, pendingApprovalCases, addNewFir, approveCaseBySho, updateExistingCase } = useCases();
   const [activeMode, setActiveMode] = useState<'new' | 'update' | 'my_cases'>('new');
 
+  // File upload state & ref
+  const fileInputRef = React.useRef<HTMLInputElement>(null);
+
   // Mode 1 State (New FIR)
   const [crimeType, setCrimeType] = useState(CRIME_TAXONOMY[0]);
   const [incidentTime, setIncidentTime] = useState('2026-07-26T02:30');
@@ -47,6 +50,7 @@ export const CaseIntake: React.FC = () => {
   const [suspectName, setSuspectName] = useState('');
   const [suspectDesc, setSuspectDesc] = useState('');
   const [evidenceName, setEvidenceName] = useState('');
+  const [evidenceSize, setEvidenceSize] = useState('');
 
   // Mode 2 State (Update Case)
   const [selectedCaseId, setSelectedCaseId] = useState(cases[0]?.id || 'FIR-2026-8819');
@@ -63,6 +67,29 @@ export const CaseIntake: React.FC = () => {
   const isViewOnly = false;
   const autoFirId = `FIR-2026-${9105 + cases.length}`;
 
+  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setEvidenceName(file.name);
+      setEvidenceSize(`${(file.size / (1024 * 1024)).toFixed(2)} MB`);
+    }
+  };
+
+  const handleMapCanvasClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    const x = (e.clientX - rect.left) / rect.width;
+    const y = (e.clientY - rect.top) / rect.height;
+
+    const newLat = 28.5300 + (1 - y) * 0.0200;
+    const newLng = 77.3850 + x * 0.0200;
+
+    setCoords({ lat: newLat, lng: newLng });
+    if (!locationName || locationName === 'Sector 18 Market, Main Alley') {
+      const locations = ['Sector 18 Financial Hub', 'Tech Park North Gate', 'MG Road Commercial Belt', 'Central Market Beat 4'];
+      setLocationName(locations[Math.floor(x * locations.length)]);
+    }
+  };
+
   const handleNewFirSubmit = (isDraft: boolean) => {
     const created = addNewFir(
       {
@@ -72,14 +99,14 @@ export const CaseIntake: React.FC = () => {
         crimeType,
         incidentTime,
         reportTime,
-        locationName,
+        locationName: locationName || 'Sector 18 Market Zone',
         coordinates: coords,
         narrative: narrative || 'Overnight shutter breach at retail outlet. NLP indexing activated.',
         victimName: victimName || 'Store Manager',
         victimPhone: victimPhone || '+91-9876543210',
         suspectName: suspectName || 'Unconfirmed — Alleged Target',
         suspectDesc: suspectDesc || 'Height ~5ft 10in, dark jacket',
-        evidenceName: evidenceName || 'Crime_Scene_Photo_01.jpg',
+        evidenceName: evidenceName ? `${evidenceName} (${evidenceSize || '8.4 MB'})` : 'Crime_Scene_Photo_01.jpg (4.2 MB)',
       },
       isDraft
     );
@@ -87,17 +114,22 @@ export const CaseIntake: React.FC = () => {
     setSubmitSuccess(
       isDraft
         ? `Draft FIR ${created.id} saved in Holding Pen. WORM Audit Log written.`
-        : `FIR ${created.id} submitted! Status: "Pending SHO Review". Holding pen updated. WORM Block signed.`
+        : `SUCCESS! FIR ${created.id} created & logged! Status: "Pending SHO Review". Switched to Holding Pen view.`
     );
 
+    // Reset form fields
     setNarrative('');
     setVictimName('');
     setVictimPhone('');
     setSuspectName('');
     setSuspectDesc('');
     setEvidenceName('');
+    setEvidenceSize('');
 
-    setTimeout(() => setSubmitSuccess(null), 6000);
+    // Automatically switch mode tab to Holding Pen so user immediately sees their submitted FIR!
+    setActiveMode('my_cases');
+
+    setTimeout(() => setSubmitSuccess(null), 7000);
   };
 
   const handleUpdateCaseSubmit = () => {
@@ -110,9 +142,10 @@ export const CaseIntake: React.FC = () => {
     );
 
     setSubmitSuccess(
-      `Case ${selectedCaseId} updated. Status: "Update Logged / Verified". Note appended & cross-case link proposed as "Pending Verification".`
+      `Case ${selectedCaseId} updated. Status: "Update Logged / Verified". Note appended & cross-case link proposed.`
     );
-    setTimeout(() => setSubmitSuccess(null), 6000);
+    setActiveMode('my_cases');
+    setTimeout(() => setSubmitSuccess(null), 7000);
     setInvestigationNote('');
     setLinkReason('');
     setSuggestedLinkFir('');
@@ -364,31 +397,44 @@ export const CaseIntake: React.FC = () => {
               <input
                 type="text"
                 value={locationName}
-                disabled={isViewOnly}
                 onChange={(e) => setLocationName(e.target.value)}
                 placeholder="Enter street name or landmark..."
                 className="flex-1 p-2.5 text-xs bg-slate-950 border border-slate-800 rounded-xl text-slate-100 focus:outline-none focus:border-cyan-500"
               />
             </div>
-            {/* Clickable Map Coordinates Simulator */}
+            {/* Interactive Vector Map Grid Canvas */}
             <div
-              onClick={() => {
-                if (isViewOnly) return;
-                setCoords({
-                  lat: 28.5355 + (Math.random() - 0.5) * 0.01,
-                  lng: 77.3910 + (Math.random() - 0.5) * 0.01,
-                });
-              }}
-              className="h-32 bg-slate-950 border border-slate-800 rounded-xl relative overflow-hidden flex items-center justify-center cursor-pointer group"
+              onClick={handleMapCanvasClick}
+              className="h-40 bg-slate-950 border border-cyan-500/30 rounded-xl relative overflow-hidden cursor-pointer group shadow-inner"
             >
               <div
-                className="absolute inset-0 opacity-20"
-                style={{ backgroundImage: `radial-gradient(#38bdf8 1px, transparent 1px)`, backgroundSize: '24px 24px' }}
+                className="absolute inset-0 opacity-25"
+                style={{
+                  backgroundImage: `linear-gradient(to right, #38bdf8 1px, transparent 1px), linear-gradient(to bottom, #38bdf8 1px, transparent 1px)`,
+                  backgroundSize: '28px 28px'
+                }}
               />
-              <div className="relative z-10 text-center space-y-1">
-                <MapPin className="w-6 h-6 text-cyan-400 mx-auto group-hover:scale-110 transition" />
-                <p className="text-xs font-bold text-slate-200">Interactive Map Pin Selector</p>
-                <p className="text-[10px] text-slate-400">Click canvas to update PostGIS spatial coordinates</p>
+              <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_transparent_30%,_#060913_90%)]" />
+
+              {/* Dynamic Placed Pin Indicator */}
+              <div
+                className="absolute transition-all duration-300 transform -translate-x-1/2 -translate-y-full z-20"
+                style={{
+                  left: `${((coords.lng - 77.3850) / 0.0200) * 100}%`,
+                  top: `${(1 - (coords.lat - 28.5300) / 0.0200) * 100}%`,
+                }}
+              >
+                <div className="flex flex-col items-center">
+                  <div className="px-2 py-0.5 bg-cyan-500 text-slate-950 text-[9px] font-mono font-extrabold rounded shadow-lg">
+                    {coords.lat.toFixed(4)}°, {coords.lng.toFixed(4)}°
+                  </div>
+                  <MapPin className="w-7 h-7 text-cyan-400 drop-shadow-[0_0_8px_rgba(56,189,248,0.8)] animate-bounce" />
+                </div>
+              </div>
+
+              <div className="absolute bottom-2 left-2 right-2 z-10 flex justify-between items-center bg-slate-900/80 border border-slate-800 px-3 py-1.5 rounded-lg text-[10px] text-slate-300 backdrop-blur-md">
+                <span className="font-bold text-cyan-400">Click Map Canvas to Pick Location</span>
+                <span className="font-mono text-slate-400">Sector 18 Spatial Grid</span>
               </div>
             </div>
           </div>
@@ -401,7 +447,6 @@ export const CaseIntake: React.FC = () => {
             <textarea
               rows={3}
               value={narrative}
-              disabled={isViewOnly}
               onChange={(e) => setNarrative(e.target.value)}
               placeholder="Describe the incident narrative in detail. NLP engine will extract modus operandi and entity connections..."
               className="w-full p-3 text-xs bg-slate-950 border border-slate-800 rounded-xl text-slate-100 placeholder-slate-500 focus:outline-none focus:border-cyan-500 resize-none"
@@ -426,7 +471,6 @@ export const CaseIntake: React.FC = () => {
                 <input
                   type="text"
                   value={victimName}
-                  disabled={isViewOnly}
                   onChange={(e) => setVictimName(e.target.value)}
                   placeholder="Full legal name"
                   className="w-full p-2 text-xs bg-slate-900 border border-slate-800 rounded-lg text-slate-100 focus:outline-none focus:border-cyan-500"
@@ -437,7 +481,6 @@ export const CaseIntake: React.FC = () => {
                 <input
                   type="text"
                   value={victimPhone}
-                  disabled={isViewOnly}
                   onChange={(e) => setVictimPhone(e.target.value)}
                   placeholder="+91 Mobile number"
                   className="w-full p-2 text-xs bg-slate-900 border border-slate-800 rounded-lg text-slate-100 focus:outline-none focus:border-cyan-500"
@@ -464,7 +507,6 @@ export const CaseIntake: React.FC = () => {
                 <input
                   type="text"
                   value={suspectName}
-                  disabled={isViewOnly}
                   onChange={(e) => setSuspectName(e.target.value)}
                   placeholder="e.g. Unknown male or alias"
                   className="w-full p-2 text-xs bg-slate-900 border border-slate-800 rounded-lg text-slate-100 focus:outline-none focus:border-cyan-500"
@@ -475,7 +517,6 @@ export const CaseIntake: React.FC = () => {
                 <input
                   type="text"
                   value={suspectDesc}
-                  disabled={isViewOnly}
                   onChange={(e) => setSuspectDesc(e.target.value)}
                   placeholder="e.g. Approx 5ft 10in, dark jacket, black motorcycle"
                   className="w-full p-2 text-xs bg-slate-900 border border-slate-800 rounded-lg text-slate-100 focus:outline-none focus:border-cyan-500"
@@ -484,25 +525,43 @@ export const CaseIntake: React.FC = () => {
             </div>
           </div>
 
-          {/* Geotagged Evidence Upload */}
-          <div className="p-4 bg-slate-950 border border-slate-800 rounded-xl space-y-2">
+          {/* Real Local File Upload Picker */}
+          <div className="p-4 bg-slate-950 border border-slate-800 rounded-xl space-y-3">
             <label className="block text-xs font-bold text-slate-200 flex items-center gap-1.5">
               <Paperclip className="w-4 h-4 text-purple-400" />
-              Evidence Attachment &amp; Digital Chain-of-Custody Upload
+              Evidence Attachment &amp; Digital Chain-of-Custody File Upload
             </label>
-            <div className="p-3 bg-slate-900 border border-dashed border-slate-800 rounded-lg text-center space-y-1">
-              <input
-                type="text"
-                value={evidenceName}
-                disabled={isViewOnly}
-                onChange={(e) => setEvidenceName(e.target.value)}
-                placeholder="Upload CCTV clip, ANPR image, or crime-scene photo..."
-                className="w-full p-2 text-xs bg-slate-950 border border-slate-800 rounded-lg text-slate-100 text-center"
-              />
-              <p className="text-[10px] text-slate-500 font-mono">
-                Metadata captured automatically: Timestamp ({new Date().toISOString().slice(0, 16)}) • Geotag ({coords.lat.toFixed(4)}°, {coords.lng.toFixed(4)}°)
-              </p>
+
+            {/* Hidden File Input */}
+            <input
+              type="file"
+              ref={fileInputRef}
+              onChange={handleFileUpload}
+              className="hidden"
+              accept="image/*,video/*,application/pdf"
+            />
+
+            <div
+              onClick={() => fileInputRef.current?.click()}
+              className="p-4 bg-slate-900 hover:bg-slate-850 border border-dashed border-purple-500/40 hover:border-purple-400 rounded-xl text-center space-y-2 cursor-pointer transition group shadow-sm"
+            >
+              <Paperclip className="w-6 h-6 text-purple-400 mx-auto group-hover:scale-110 transition" />
+              <div>
+                <p className="text-xs font-bold text-slate-200">
+                  {evidenceName ? `Attached: ${evidenceName}` : 'Click to Browse Local File Directory'}
+                </p>
+                <p className="text-[10px] text-slate-400">
+                  {evidenceSize ? `File Size: ${evidenceSize}` : 'Supports CCTV clips, ANPR images, or crime scene photos'}
+                </p>
+              </div>
+              <span className="inline-block px-3 py-1 bg-purple-600/30 hover:bg-purple-600/50 text-purple-200 border border-purple-500/50 text-xs font-bold rounded-lg transition">
+                Browse Files...
+              </span>
             </div>
+
+            <p className="text-[10px] text-slate-500 font-mono text-center">
+              Metadata captured automatically: Timestamp ({new Date().toISOString().slice(0, 16)}) • Geotag ({coords.lat.toFixed(4)}°, {coords.lng.toFixed(4)}°)
+            </p>
           </div>
 
           {/* Form Action Buttons */}
