@@ -340,21 +340,7 @@ export const PublicLanding: React.FC<{ onOpenDashboard: () => void }> = ({ onOpe
             Next-Generation AI Intelligence for Law Enforcement & Public Safety
           </h1>
 
-          {/* Architecture narrative — flip card */}
-          <div
-            className="w-full max-w-3xl mx-auto cursor-pointer"
-            style={{ perspective: '1000px', height: '220px' }}
-            onClick={() => {}}
-          >
-            <div className="relative w-full h-full">
-              <div className="absolute inset-0 bg-slate-900/95 border border-slate-800 p-8 rounded-2xl text-left shadow-2xl backdrop-blur-xl flex flex-col justify-center gap-3">
-                <span className="text-sm font-bold text-cyan-400">The Operational Challenge & NETRA Architecture</span>
-                <p className="text-base text-slate-200 leading-relaxed">
-                  Officers currently work across siloed FIR systems, paper records, and manual cross-referencing — making it slow to spot patterns across cases, districts, and repeat offenders. NETRA unifies this data into one platform: AI models surface hotspots and investigative leads, every score comes with a plain-language explanation, and every action is logged to a tamper-evident audit trail reviewed outside the police chain of command.
-                </p>
-              </div>
-            </div>
-          </div>
+
         </div>
 
         {/* Pipeline */}
