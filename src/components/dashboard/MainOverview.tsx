@@ -333,15 +333,6 @@ export const MainOverview: React.FC<{ onNavigate: (tab: string) => void }> = ({ 
         </div>
       )}
 
-          <button
-            onClick={() => onNavigate('network')}
-            className="w-full py-2.5 text-xs font-bold bg-cyan-600 hover:bg-cyan-500 text-white border border-cyan-500 rounded-lg transition shadow-md"
-          >
-            Launch Link Graph Analysis →
-          </button>
-        </div>
-      </div>
-
       {/* ── FIR / Zone Table — role-gated ───────────────────────────────── */}
       <div className="p-6 dashboard-card rounded-2xl space-y-4">
         <div className="flex items-center justify-between gap-3">
