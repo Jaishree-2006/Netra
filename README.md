@@ -33,27 +33,6 @@
 
 ---
 
-## 🚀 Run Locally
-
-### Frontend
-
-```bash
-npm install
-npm run dev
-```
-
-### Backend (FastAPI)
-
-```bash
-cd backend
-pip install -r requirements.txt
-uvicorn main:app --reload
-```
-
-Backend API docs: `http://localhost:8000/docs`
-
----
-
 ## 🔒 Security & Ethics
 
 This platform is designed with **ethical AI first principles**:
