@@ -45,28 +45,28 @@ export const MainOverview: React.FC<{ onNavigate: (tab: string) => void }> = ({ 
   return (
     <div className="space-y-6 select-none">
 
-      {/* ── Alert Banner (Dark Mode High Contrast) ──────────────────── */}
-      <div className="p-5 bg-slate-900 border border-red-500/40 rounded-2xl flex flex-col md:flex-row items-start md:items-center justify-between gap-4 shadow-2xl relative overflow-hidden">
+      {/* ── Alert Banner (Clean Proportional Typography) ──────────────────── */}
+      <div className="p-4 bg-slate-900 border border-red-500/40 rounded-2xl flex flex-col md:flex-row items-start md:items-center justify-between gap-3 shadow-2xl relative overflow-hidden">
         <div className="flex items-center gap-3">
-          <div className="p-2.5 bg-red-500/20 text-red-400 rounded-xl border border-red-500/40 animate-pulse shrink-0">
-            <ShieldAlert className="w-6 h-6" />
+          <div className="p-2 bg-red-500/20 text-red-400 rounded-xl border border-red-500/40 animate-pulse shrink-0">
+            <ShieldAlert className="w-5 h-5" />
           </div>
           <div>
             <div className="flex items-center gap-2">
-              <span className="text-xs font-mono font-bold text-red-400 uppercase tracking-wide">NOCTURNAL ANOMALY ALERT</span>
-              <span className="px-2 py-0.5 text-[10px] bg-red-500/20 text-red-300 rounded font-bold border border-red-500/30">SECTOR 18</span>
+              <span className="text-[10px] font-mono font-bold text-red-400 uppercase tracking-wide">NOCTURNAL ANOMALY ALERT</span>
+              <span className="px-2 py-0.5 text-[9px] bg-red-500/20 text-red-300 rounded font-bold border border-red-500/30">SECTOR 18</span>
             </div>
-            <p className="display-heading text-[1.15rem] md:text-[1.3rem] font-extrabold text-slate-100 mt-0.5">
+            <p className="display-heading text-xs md:text-sm font-bold text-slate-100 mt-0.5">
               Overnight Spikes in Vehicle Theft &amp; Armed Robbery (+38% vs 30-day baseline)
             </p>
           </div>
         </div>
         <button
           onClick={() => onNavigate('geospatial')}
-          className="px-4 py-2 text-xs font-bold bg-slate-800 hover:bg-slate-700 text-slate-100 rounded-lg transition shadow-md border border-slate-700 shrink-0 flex items-center gap-1.5"
+          className="px-3 py-1.5 text-xs font-bold bg-slate-800 hover:bg-slate-700 text-slate-100 rounded-lg transition shadow-md border border-slate-700 shrink-0 flex items-center gap-1.5"
         >
           View Hotspot Heatmap
-          <ArrowUpRight className="w-4 h-4 text-cyan-400" />
+          <ArrowUpRight className="w-3.5 h-3.5 text-cyan-400" />
         </button>
       </div>
 
@@ -150,26 +150,27 @@ export const MainOverview: React.FC<{ onNavigate: (tab: string) => void }> = ({ 
         </div>
       </div>
 
-      {/* ── Chart + AI Anomaly Feed ───────────────────────────────────── */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      {/* ── Chart + AI Anomaly Feed (50/50 Balanced Prominent Grid) ───── */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
 
-        <div className="lg:col-span-2 p-6 dashboard-card rounded-2xl space-y-4">
+        {/* 24-Hour Temporal Forecast Graph (Clean Tight Layout, No Dead Space) */}
+        <div className="p-5 dashboard-card rounded-2xl flex flex-col justify-between space-y-3">
           <div className="flex items-center justify-between gap-3">
             <div>
-              <h3 className="display-heading text-base md:text-lg font-extrabold text-slate-100 flex items-center gap-2">
-                <TrendingUp className="w-5 h-5 text-cyan-400" />
+              <h3 className="display-heading text-sm md:text-base font-extrabold text-slate-100 flex items-center gap-2">
+                <TrendingUp className="w-4 h-4 text-cyan-400" />
                 24-Hour Temporal Crime &amp; AI Risk Forecast
               </h3>
-              <p className="text-xs text-slate-400">Real-time crime events overlaid with XGBoost 3-hour risk probability</p>
+              <p className="text-[11px] text-slate-400">Real-time crime events overlaid with XGBoost 3-hour risk probability</p>
             </div>
-            <span className="px-2.5 py-1 text-xs bg-slate-950 border border-slate-800 text-cyan-400 rounded-lg font-mono font-bold shrink-0">
+            <span className="px-2 py-1 text-[11px] bg-slate-950 border border-slate-800 text-cyan-400 rounded-lg font-mono font-bold shrink-0">
               Live Hourly Feed
             </span>
           </div>
 
-          <div className="h-64 w-full pt-2">
+          <div className="h-56 w-full">
             <ResponsiveContainer width="100%" height="100%">
-              <AreaChart data={trendData}>
+              <AreaChart data={trendData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
                 <defs>
                   <linearGradient id="riskGrad" x1="0" y1="0" x2="0" y2="1">
                     <stop offset="5%" stopColor="#38bdf8" stopOpacity={0.4} />
@@ -180,83 +181,104 @@ export const MainOverview: React.FC<{ onNavigate: (tab: string) => void }> = ({ 
                     <stop offset="95%" stopColor="#ef4444" stopOpacity={0.0} />
                   </linearGradient>
                 </defs>
-                <XAxis dataKey="time" stroke="#94a3b8" fontSize={12} fontWeight="bold" />
-                <YAxis stroke="#94a3b8" fontSize={12} fontWeight="bold" />
-                <Tooltip contentStyle={{ backgroundColor: '#0f172a', borderColor: '#334155', borderRadius: '10px', color: '#f8fafc', fontSize: '12px' }} />
-                <Area type="monotone" dataKey="predictedRisk" stroke="#38bdf8" strokeWidth={2.5} fillOpacity={1} fill="url(#riskGrad)" name="AI Risk Score %" />
-                <Area type="monotone" dataKey="incidents" stroke="#ef4444" strokeWidth={2.5} fillOpacity={1} fill="url(#incidentGrad)" name="Actual Incidents" />
+                <XAxis dataKey="time" stroke="#94a3b8" fontSize={11} fontWeight="bold" />
+                <YAxis stroke="#94a3b8" fontSize={11} fontWeight="bold" />
+                <Tooltip contentStyle={{ backgroundColor: '#0f172a', borderColor: '#334155', borderRadius: '10px', color: '#f8fafc', fontSize: '11px' }} />
+                <Area type="monotone" dataKey="predictedRisk" stroke="#38bdf8" strokeWidth={2} fillOpacity={1} fill="url(#riskGrad)" name="AI Risk Score %" />
+                <Area type="monotone" dataKey="incidents" stroke="#ef4444" strokeWidth={2} fillOpacity={1} fill="url(#incidentGrad)" name="Actual Incidents" />
               </AreaChart>
             </ResponsiveContainer>
           </div>
         </div>
 
-        {/* AI Anomaly Feed */}
-        <div className="p-6 dashboard-card rounded-2xl space-y-4 flex flex-col justify-between">
+        {/* AI Anomaly Feed (Expanded Prominent 50% Column) */}
+        <div className="p-5 dashboard-card rounded-2xl space-y-3.5 flex flex-col justify-between border-purple-500/30">
           <div>
-            <h3 className="display-heading text-base md:text-lg font-extrabold text-slate-100 flex items-center gap-2 mb-1">
-              <Activity className="w-5 h-5 text-purple-400 animate-pulse" />
-              AI Pattern Anomaly Feed
-            </h3>
-            <p className="text-xs text-slate-400 mb-4">Transformer NLP &amp; Clustering detections · Pending analyst review</p>
+            <div className="flex items-center justify-between mb-1">
+              <h3 className="display-heading text-sm md:text-base font-extrabold text-slate-100 flex items-center gap-2">
+                <Activity className="w-4 h-4 text-purple-400 animate-pulse" />
+                AI Platform Pattern &amp; Anomaly Detection Feed
+              </h3>
+              <span className="px-2 py-0.5 bg-purple-500/20 text-purple-300 border border-purple-500/40 rounded text-[10px] font-mono font-bold">
+                PRIORITY CORE
+              </span>
+            </div>
+            <p className="text-[11px] text-slate-400 mb-3">Transformer NLP &amp; Clustering detections · Automated threat pattern monitor</p>
 
             <div className="space-y-3">
 
-              {/* Feed item 1 */}
-              <div className="p-3.5 bg-slate-950 border border-slate-800 rounded-xl text-xs space-y-1.5">
-                <div className="flex justify-between text-cyan-400 font-mono font-bold">
-                  <span>PATTERN MATCH #991</span>
+              {/* Anomaly Item 1 */}
+              <div className="p-3 bg-slate-950 border border-purple-500/40 rounded-xl text-xs space-y-1.5 hover:border-purple-400 transition shadow-sm">
+                <div className="flex justify-between text-cyan-400 font-mono font-bold text-[11px]">
+                  <span>PATTERN MATCH #991 • MO CLUSTER</span>
                   <span>12m ago</span>
                 </div>
-                <p className="text-slate-100 font-bold">Modus Operandi Correlation</p>
-                <p className="text-slate-300 text-xs leading-relaxed">
-                  FIR-2026-8819 &amp; FIR-2026-8820 share RFID signal-jamming signature vectors — potential common origin.
+                <p className="text-slate-100 font-bold">Modus Operandi Signature Correlation</p>
+                <p className="text-slate-300 text-[11px] leading-relaxed">
+                  FIR-2026-8819 &amp; FIR-2026-8820 share RFID signal-jamming signature vectors — potential common syndicate origin.
                 </p>
                 <div className="flex items-center justify-between pt-1.5 border-t border-slate-800">
-                  <span className="font-mono text-xs text-cyan-400 font-bold">Similarity: 87%</span>
+                  <span className="font-mono text-[11px] text-cyan-400 font-bold">Vector Match Similarity: 87%</span>
                   <button
                     id="anomaly-991-review-btn"
                     onClick={() => onNavigate('network')}
                     className="text-xs text-purple-300 font-bold hover:underline flex items-center gap-1"
                   >
-                    Flagged for review →
+                    Open Link Visualizer →
                   </button>
                 </div>
               </div>
 
-              {/* Feed item 2 */}
-              <div className="p-3.5 bg-slate-950 border border-amber-500/30 rounded-xl text-xs space-y-1.5">
-                <div className="flex justify-between text-amber-400 font-mono font-bold">
-                  <span>PROXIMITY SIGNAL #447</span>
+              {/* Anomaly Item 2 */}
+              <div className="p-3 bg-slate-950 border border-amber-500/40 rounded-xl text-xs space-y-1.5 hover:border-amber-400 transition shadow-sm">
+                <div className="flex justify-between text-amber-400 font-mono font-bold text-[11px]">
+                  <span>PROXIMITY SIGNAL #447 • CELL TOWER OVERLAP</span>
                   <span>45m ago</span>
                 </div>
                 <p className="text-slate-100 font-bold">Cell-Signal Proximity Hypothesis</p>
-                <p className="text-slate-300 text-xs leading-relaxed">
+                <p className="text-slate-300 text-[11px] leading-relaxed">
                   <span className="font-mono bg-slate-800 px-1.5 py-0.5 rounded text-cyan-300 font-bold">SUSPECT-REF-2231</span> cell-tower
-                  proximity detected in Sector 18 during robbery window.
+                  triangulation ping detected in Sector 18 during robbery window.
                 </p>
-                <div className="flex items-center justify-between pt-1.5 border-t border-slate-800">
-                  <div className="flex items-center gap-1 text-xs text-amber-300 font-mono font-bold">
+                  <div className="flex items-center gap-1 text-[11px] text-amber-300 font-mono font-bold">
                     <Lock className="w-3 h-3" />
-                    Warrant #WR-2026-448
+                    Bail Warrant #WR-2026-448
                   </div>
-                  {canSeeCaseDetail ? (
-                    <button
-                      id="anomaly-447-case-btn"
-                      onClick={() => onNavigate('repeat-offenders')}
-                      className="text-xs text-purple-300 font-bold hover:underline flex items-center gap-1"
-                    >
-                      <Eye className="w-3 h-3" /> Open case →
-                    </button>
-                  ) : (
-                    <span className="text-xs text-slate-500 flex items-center gap-1 font-mono">
-                      <EyeOff className="w-3 h-3" /> Restricted
-                    </span>
-                  )}
+                  <button
+                    id="anomaly-447-case-btn"
+                    onClick={() => onNavigate('repeat-offenders')}
+                    className="text-xs text-purple-300 font-bold hover:underline flex items-center gap-1"
+                  >
+                    Inspect Target Dossier →
+                  </button>
                 </div>
               </div>
 
+              {/* Anomaly Item 3 */}
+              <div className="p-3 bg-slate-950 border border-slate-800 rounded-xl text-xs space-y-1.5 hover:border-slate-700 transition shadow-sm">
+                <div className="flex justify-between text-emerald-400 font-mono font-bold text-[11px]">
+                  <span>ANPR ANOMALY #102 • VEHICLE MATCH</span>
+                  <span>1h ago</span>
+                </div>
+                <p className="text-slate-100 font-bold">Stolen Vehicle FLOCK Camera Detection</p>
+                <p className="text-slate-300 text-[11px] leading-relaxed">
+                  Black SUV (HR-26-8921) matched on FLOCK ANPR Camera 4B moving north towards Highway Toll Gate 4.
+                </p>
+                <div className="flex items-center justify-between pt-1.5 border-t border-slate-800">
+                  <span className="font-mono text-[11px] text-emerald-400 font-bold">Confidence: High (94%)</span>
+                  <button
+                    onClick={() => onNavigate('geospatial')}
+                    className="text-xs text-purple-300 font-bold hover:underline flex items-center gap-1"
+                  >
+                    View on Map →
+                  </button>
+                </div>
+              </div>
+
+            </div>
           </div>
         </div>
+      </div>
 
       {/* ── 3-State Data Pipeline: SHO Supervisory Approval Queue ───── */}
       {pendingApprovalCases.length > 0 && (
