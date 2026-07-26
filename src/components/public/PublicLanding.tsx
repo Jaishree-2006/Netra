@@ -13,45 +13,44 @@ interface FlipCardProps {
   accent: string;
   accentBg: string;
   accentBorder: string;
-  label: string;
+  accentText: string;
   icon: React.ReactNode;
   title: string;
   shortDesc: string;
-  whyItMatters: string;
+  bullets: string[];
 }
 
 const FlipCard: React.FC<FlipCardProps> = ({
-  accent, accentBg, accentBorder, label, icon, title, shortDesc, whyItMatters,
+  accent, accentBg, accentBorder, accentText, icon, title, shortDesc, bullets,
 }) => {
   const [flipped, setFlipped] = useState(false);
 
   return (
     <div
-      className="relative w-full cursor-pointer"
-      style={{ perspective: '1000px', height: '260px' }}
+      className="relative w-full cursor-pointer group"
+      style={{ perspective: '1100px', height: '280px' }}
       onClick={() => setFlipped((f) => !f)}
     >
       <div
         className="relative w-full h-full transition-transform duration-700"
-        style={{
-          transformStyle: 'preserve-3d',
-          transform: flipped ? 'rotateY(180deg)' : 'rotateY(0deg)',
-        }}
+        style={{ transformStyle: 'preserve-3d', transform: flipped ? 'rotateY(180deg)' : 'rotateY(0deg)' }}
       >
         {/* FRONT */}
         <div
-          className={`absolute inset-0 bg-slate-900/95 border ${accentBorder} rounded-2xl p-7 flex flex-col justify-between shadow-2xl backdrop-blur-xl overflow-hidden`}
+          className={`absolute inset-0 bg-slate-900/95 border ${accentBorder} rounded-2xl p-7 flex flex-col justify-between shadow-2xl backdrop-blur-xl overflow-hidden transition-shadow group-hover:shadow-lg`}
           style={{ backfaceVisibility: 'hidden' }}
         >
-          <div className={`h-1 w-full bg-gradient-to-r ${accent} absolute top-0 left-0 rounded-t-2xl`} />
-          <div className="flex flex-col gap-3 pt-2">
-            <div className={`p-3 rounded-xl ${accentBg} w-fit`}>{icon}</div>
-            <h4 className="text-xl font-extrabold text-slate-100 leading-snug">{title}</h4>
+          <div className={`h-[3px] w-full bg-gradient-to-r ${accent} absolute top-0 left-0 rounded-t-2xl`} />
+          <div className="flex flex-col gap-4 pt-2">
+            <div className={`p-3 rounded-2xl ${accentBg} w-fit`}>{icon}</div>
+            <h4 className="text-xl font-extrabold text-slate-100 leading-snug tracking-tight">{title}</h4>
             <p className="text-sm text-slate-400 leading-relaxed">{shortDesc}</p>
           </div>
-          <div className="flex items-center gap-1.5 text-xs text-slate-500 mt-2">
-            <RotateCcw className="w-3.5 h-3.5" />
-            <span>Click to learn why it matters</span>
+          {/* Subtle tap hint — icon only, no text */}
+          <div className="flex justify-end">
+            <div className={`p-1.5 rounded-lg ${accentBg} opacity-60 group-hover:opacity-100 transition`}>
+              <RotateCcw className={`w-3.5 h-3.5 ${accentText}`} />
+            </div>
           </div>
         </div>
 
@@ -60,15 +59,25 @@ const FlipCard: React.FC<FlipCardProps> = ({
           className={`absolute inset-0 bg-slate-950 border ${accentBorder} rounded-2xl p-7 flex flex-col justify-between shadow-2xl backdrop-blur-xl overflow-hidden`}
           style={{ backfaceVisibility: 'hidden', transform: 'rotateY(180deg)' }}
         >
-          <div className={`h-1 w-full bg-gradient-to-r ${accent} absolute top-0 left-0 rounded-t-2xl`} />
-          <div className="flex flex-col gap-3 pt-2">
-            <span className={`text-[11px] font-mono font-extrabold tracking-widest ${label}`}>{title.toUpperCase()}</span>
-            <h4 className="text-lg font-bold text-slate-100">Why It Matters</h4>
-            <p className="text-sm text-slate-300 leading-relaxed">{whyItMatters}</p>
+          <div className={`h-[3px] w-full bg-gradient-to-r ${accent} absolute top-0 left-0 rounded-t-2xl`} />
+          <div className="flex flex-col gap-4 pt-2">
+            <span className={`text-[10px] font-mono font-extrabold tracking-[0.2em] uppercase ${accentText}`}>
+              Why It Matters
+            </span>
+            <h4 className="text-lg font-bold text-slate-100">{title}</h4>
+            <ul className="space-y-2">
+              {bullets.map((b, i) => (
+                <li key={i} className="flex items-start gap-2 text-sm text-slate-300 leading-relaxed">
+                  <span className={`mt-1.5 w-1.5 h-1.5 rounded-full shrink-0 bg-gradient-to-r ${accent}`} />
+                  {b}
+                </li>
+              ))}
+            </ul>
           </div>
-          <div className="flex items-center gap-1.5 text-xs text-slate-500">
-            <RotateCcw className="w-3.5 h-3.5" />
-            <span>Click to flip back</span>
+          <div className="flex justify-end">
+            <div className={`p-1.5 rounded-lg ${accentBg} opacity-60`}>
+              <RotateCcw className={`w-3.5 h-3.5 ${accentText}`} />
+            </div>
           </div>
         </div>
       </div>
@@ -112,21 +121,30 @@ const RequestAccessModal: React.FC<{ onClose: () => void }> = ({ onClose }) => {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/90 backdrop-blur-md p-4 overflow-y-auto">
-      <div className="w-full max-w-xl bg-slate-900 border border-slate-700/60 rounded-2xl shadow-2xl my-8">
-        {/* Header */}
-        <div className="p-6 border-b border-slate-800 flex items-start justify-between gap-4">
-          <div className="flex items-center gap-3">
-            <div className="p-2.5 bg-cyan-500/10 border border-cyan-500/30 rounded-xl">
-              <BadgeCheck className="w-5 h-5 text-cyan-400" />
-            </div>
-            <div>
-              <h3 className="text-lg font-extrabold text-slate-100">Request Platform Access</h3>
-              <p className="text-xs text-slate-400 mt-0.5">Provisioning requires supervisor verification — not self-serve</p>
-            </div>
-          </div>
-          <button onClick={onClose} className="p-2 text-slate-500 hover:text-slate-200 hover:bg-slate-800 rounded-lg transition">
+      <div className="w-full max-w-2xl bg-slate-900 border border-slate-700/40 rounded-3xl shadow-2xl my-8 overflow-hidden">
+        {/* Gradient Header Banner */}
+        <div className="relative p-8 bg-gradient-to-br from-cyan-950 via-slate-900 to-purple-950 border-b border-slate-700/50">
+          <div className="absolute inset-0 opacity-20" style={{ backgroundImage: 'radial-gradient(#06b6d4 1px, transparent 1px)', backgroundSize: '24px 24px' }} />
+          <button onClick={onClose} className="absolute top-4 right-4 p-2 text-slate-400 hover:text-white hover:bg-white/10 rounded-xl transition">
             <X className="w-4 h-4" />
           </button>
+          <div className="relative flex items-start gap-5">
+            <div className="p-4 bg-cyan-500/15 border border-cyan-500/40 rounded-2xl shrink-0">
+              <BadgeCheck className="w-8 h-8 text-cyan-400" />
+            </div>
+            <div className="space-y-1.5">
+              <span className="text-[10px] font-mono font-extrabold tracking-widest text-cyan-400 uppercase">NETRA AI — Secure Access</span>
+              <h3 className="text-2xl font-extrabold text-slate-100 tracking-tight">Request Platform Access</h3>
+              <p className="text-sm text-slate-400 leading-relaxed max-w-md">
+                Account provisioning is admin-controlled and requires your supervisor to verify your identity. No account is created automatically.
+              </p>
+              <div className="flex flex-wrap gap-2 pt-1">
+                {['Badge ID Verified', 'Supervisor Sign-off', 'Admin Approval Required'].map((tag) => (
+                  <span key={tag} className="px-2.5 py-1 text-[10px] font-mono font-bold bg-slate-800/80 border border-slate-700 text-slate-300 rounded-lg">{tag}</span>
+                ))}
+              </div>
+            </div>
+          </div>
         </div>
 
         {submitted ? (
@@ -239,31 +257,43 @@ export const PublicLanding: React.FC<{ onOpenDashboard: () => void }> = ({ onOpe
       accent: 'from-cyan-500 to-blue-500',
       accentBg: 'bg-cyan-500/10',
       accentBorder: 'border-slate-800 hover:border-cyan-500/40',
-      label: 'text-cyan-400',
+      accentText: 'text-cyan-400',
       icon: <MapPin className="w-7 h-7 text-cyan-400" />,
       title: 'Geospatial Hotspot Density',
       shortDesc: 'PostGIS vector tiles & time-series sliders for nocturnal patrol optimization.',
-      whyItMatters: 'Visualizes continuous crime density and temporal drift over 24 hours so commanders can deploy patrols proactively before incidents occur — reducing reactive response lag.',
+      bullets: [
+        'Visualizes continuous crime density & 24h temporal drift',
+        'Enables proactive patrol deployment before incidents occur',
+        'Drastically reduces reactive emergency response lag'
+      ],
     },
     {
       accent: 'from-blue-500 to-purple-500',
       accentBg: 'bg-purple-500/10',
       accentBorder: 'border-slate-800 hover:border-purple-500/40',
-      label: 'text-purple-400',
+      accentText: 'text-purple-400',
       icon: <GitFork className="w-7 h-7 text-purple-400" />,
       title: 'Link & Network Graph',
       shortDesc: 'Multi-entity relationship mapping across FIRs, stolen vehicles, and burner SIMs.',
-      whyItMatters: 'Reveals hidden multi-hop connections across cases and suspect aliases, dismantling criminal syndicates rather than treating incidents in isolation.',
+      bullets: [
+        'Reveals hidden multi-hop links across cases & suspect aliases',
+        'Dismantles organized syndicates rather than isolated crimes',
+        'Cross-checks phone IMEIs, vehicle plates, & co-accused logs'
+      ],
     },
     {
       accent: 'from-purple-500 to-emerald-500',
       accentBg: 'bg-emerald-500/10',
       accentBorder: 'border-slate-800 hover:border-emerald-500/40',
-      label: 'text-emerald-400',
+      accentText: 'text-emerald-400',
       icon: <ShieldCheck className="w-7 h-7 text-emerald-400" />,
       title: 'Explainable SHAP AI',
       shortDesc: 'No black-box scores. Clear factor attribution for judicial & ethics compliance.',
-      whyItMatters: 'Every risk score is traced back to the specific contributing factors — so it can be reviewed, challenged, and defended in court with a fully auditable evidence chain.',
+      bullets: [
+        'Traces every risk score directly to contributing factors',
+        'Ensures full legal compliance & court-defendable evidence',
+        'Transparent factor attribution prevents demographic bias'
+      ],
     },
   ];
 
@@ -378,17 +408,54 @@ export const PublicLanding: React.FC<{ onOpenDashboard: () => void }> = ({ onOpe
         </div>
 
         {/* Ethics Block */}
-        <div id="ethics" className="w-full max-w-3xl bg-slate-900/90 border border-slate-800 p-8 rounded-2xl text-left shadow-2xl backdrop-blur-xl space-y-4">
-          <h3 className="text-xl font-extrabold text-slate-100 flex items-center gap-2">
-            <ShieldCheck className="w-5 h-5 text-emerald-400" />
-            Model Fairness & Independent Audit
-          </h3>
-          <p className="text-sm text-slate-300 leading-relaxed">
-            NETRA's risk models are audited quarterly by an independent ethics board for disparate impact across demographic groups. Every score is SHAP-explainable, every access event is blockchain-timestamped, and the audit log is readable by the oversight board outside the police command structure.
-          </p>
-          <div className="flex flex-wrap gap-3 text-xs font-mono font-bold">
-            {['SHAP Explainability', 'WORM Audit Trail', 'Quarterly Bias Review', 'ISO/IEC 27001', 'Zero Automated Action'].map((tag) => (
-              <span key={tag} className="px-3 py-1.5 bg-slate-800 border border-slate-700 rounded-lg text-slate-300">{tag}</span>
+        <div id="ethics" className="w-full max-w-4xl bg-slate-900/90 border border-slate-800 p-8 rounded-3xl text-left shadow-2xl backdrop-blur-xl space-y-6">
+          <div className="flex items-center gap-3 pb-4 border-b border-slate-800/80">
+            <div className="p-3 bg-emerald-500/10 border border-emerald-500/30 rounded-2xl">
+              <ShieldCheck className="w-6 h-6 text-emerald-400" />
+            </div>
+            <div>
+              <h3 className="text-2xl font-extrabold text-slate-100">Model Fairness &amp; Independent Audit</h3>
+              <p className="text-xs font-mono text-emerald-400 font-bold uppercase tracking-wider mt-0.5">Built-in Accountability &amp; Anti-Bias Safeguards</p>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="p-4 bg-slate-950/60 border border-slate-800 rounded-2xl flex items-start gap-3">
+              <CheckCircle2 className="w-5 h-5 text-emerald-400 shrink-0 mt-0.5" />
+              <div>
+                <h4 className="text-sm font-bold text-slate-100">Quarterly Demographic Bias Audits</h4>
+                <p className="text-xs text-slate-400 leading-relaxed mt-1">Evaluated by an independent ethics board for disparate impact across demographic &amp; geographic groups.</p>
+              </div>
+            </div>
+
+            <div className="p-4 bg-slate-950/60 border border-slate-800 rounded-2xl flex items-start gap-3">
+              <CheckCircle2 className="w-5 h-5 text-cyan-400 shrink-0 mt-0.5" />
+              <div>
+                <h4 className="text-sm font-bold text-slate-100">SHAP Factor Attribution</h4>
+                <p className="text-xs text-slate-400 leading-relaxed mt-1">No black boxes. Every score breaks down the precise variables driving the output for legal defence.</p>
+              </div>
+            </div>
+
+            <div className="p-4 bg-slate-950/60 border border-slate-800 rounded-2xl flex items-start gap-3">
+              <CheckCircle2 className="w-5 h-5 text-purple-400 shrink-0 mt-0.5" />
+              <div>
+                <h4 className="text-sm font-bold text-slate-100">WORM Blockchain Audit Log</h4>
+                <p className="text-xs text-slate-400 leading-relaxed mt-1">Every query, score generation, and access attempt is cryptographically signed and immutable.</p>
+              </div>
+            </div>
+
+            <div className="p-4 bg-slate-950/60 border border-slate-800 rounded-2xl flex items-start gap-3">
+              <CheckCircle2 className="w-5 h-5 text-amber-400 shrink-0 mt-0.5" />
+              <div>
+                <h4 className="text-sm font-bold text-slate-100">Zero Automated Dispatch</h4>
+                <p className="text-xs text-slate-400 leading-relaxed mt-1">AI outputs serve exclusively as decision support. Human officer sign-off is mandatory for all action.</p>
+              </div>
+            </div>
+          </div>
+
+          <div className="flex flex-wrap gap-2.5 pt-2 border-t border-slate-800/80 text-xs font-mono font-bold">
+            {['SHAP Explainability', 'WORM Audit Trail', 'Quarterly Bias Review', 'ISO/IEC 27001', 'Human-in-the-Loop Safeguards'].map((tag) => (
+              <span key={tag} className="px-3.5 py-1.5 bg-slate-800/80 border border-slate-700/80 rounded-xl text-slate-300 shadow-sm">{tag}</span>
             ))}
           </div>
         </div>
